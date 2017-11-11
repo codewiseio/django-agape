@@ -1,12 +1,11 @@
-=====
 Agape
-=====
+
 
 Agape is collection of Django apps to use for building modern
 web applications.
 
 
-Quick start
+# Quick start
 -----------
 
 1. Add the desired applications into the INSTALLED_APPS setting like this:
@@ -29,14 +28,14 @@ Quick start
 5. Visit http://127.0.0.1:8000/polls/ to participate in the poll.
 
 
-=====
-DEVELOPER INSTRUCTIONS
-=====
 
-== Packaging
+# Developer Instructions
+------
+
+## Packaging
 
 python setup.py sdist
 
-== Installation
+## Installation
 
 pip install  django-agape/dist/django-agape-0.1.tar.gz
