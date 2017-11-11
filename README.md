@@ -1,12 +1,12 @@
-Agape
+# Agape
 
 
 Agape is collection of Django apps to use for building modern
 web applications.
 
 
-# Quick start
------------
+## Quick start
+
 
 1. Add the desired applications into the INSTALLED_APPS setting like this:
 
@@ -29,13 +29,13 @@ web applications.
 
 
 
-# Developer Instructions
-------
+## Developer Instructions
 
-## Packaging
+
+### Packaging
 
 python setup.py sdist
 
-## Installation
+### Installation
 
 pip install  django-agape/dist/django-agape-0.1.tar.gz
