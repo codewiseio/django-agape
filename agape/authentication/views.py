@@ -5,10 +5,11 @@ from rest_framework import generics
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
 from rest_framework_jwt.settings import api_settings
-User = get_user_model()
 
 
 
@@ -53,8 +54,15 @@ class UserViewSet(viewsets.ModelViewSet):
         Sends an email to the user to activate the account before permitting login.
         """
 
+         # create the user
+        data = request.data.copy()
 
-        
+        # this notifier is going to modify the data before sending it to the serializer
+        # this.observers.notifyBefore('agape.authentication.users.create', [request, data] );
+        # scope = scope('agape.authentication.users.create')
+        # scope.announce('before',request, data)
+
+
         # check for existing account with given email
         try:
             duplicate = User.objects.get(email=request.data.get('email'))
@@ -66,9 +74,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 }, status=status.HTTP_409_CONFLICT)
         except:
             pass
-
-        # create the user
-        data = request.data.copy()
 
         # set default user status
         data['status'] = 0 if AUTHENTICATION['REQUIRE_ACTIVATION'] else 1

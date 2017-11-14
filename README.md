@@ -38,4 +38,4 @@ python setup.py sdist
 
 ### Installation
 
-pip install  django-agape/dist/django-agape-0.1.tar.gz
+pip install django-agape/dist/django-agape-0.1.tar.gz

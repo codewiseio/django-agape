@@ -18,6 +18,7 @@ setup(
     url='https://codewise.live/',
     author='Jeffrey Ray Hallock',
     author_email='codewiseio@gmail.com',
+    test_suite = "runtests.runtests",
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
