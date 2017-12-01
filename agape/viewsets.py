@@ -7,7 +7,10 @@ from rest_framework.response import Response
 class ModelViewSet(viewsets.ModelViewSet):
 
 	def create(self, request, *args, **kwargs):
-		trigger(self.context+'.create:before',request,*args,**kwargs)
+		trigger(self.context+'.create:request',request,*args,**kwargs)
+
+		data = request.data
+		trigger(self.context+'.create:before',data)
 
 		serializer = self.get_serializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
@@ -23,7 +26,9 @@ class ModelViewSet(viewsets.ModelViewSet):
 		return instance
 
 	def retrieve(self, request, *args, **kwargs):
-		trigger(self.context+'.retrieve:before',request,*args,**kwargs)
+		trigger(self.context+'.retrieve:request',request,*args,**kwargs)
+
+		trigger(self.context+'.retrieve:before',kwargs['pk'])
 
 		instance = self.get_object()
 		trigger(self.context+'.retrieve:success',instance)
@@ -37,11 +42,14 @@ class ModelViewSet(viewsets.ModelViewSet):
 		return response
 
 	def update(self, request, *args, **kwargs):
-		trigger(self.context+'.update:before',request,*args,**kwargs)
+		trigger(self.context+'.update:request',request,*args,**kwargs)
 
 		partial = kwargs.pop('partial', False)        
 		instance = self.get_object()
-		trigger(self.context+'.update:retrieve',request,*args,**kwargs)
+		trigger(self.context+'.update:retrieve',instance)
+
+		data = request.data
+		trigger(self.context+'.update:before',data)
 
 		serializer = self.get_serializer(instance, data=request.data, partial=partial)
 		serializer.is_valid(raise_exception=True)
@@ -60,10 +68,10 @@ class ModelViewSet(viewsets.ModelViewSet):
 		return instance
 
 	def destroy(self, request, *args, **kwargs):
-		trigger(self.context+'.destroy:before',request,*args,**kwargs)
+		trigger(self.context+'.destroy:request',request,*args,**kwargs)
 
 		instance = self.get_object()
-		trigger(self.context+'.destroy:retrieve',instance)
+		trigger(self.context+'.destroy:before',instance)
 
 		self.perform_destroy(instance)
 		trigger(self.context+'.destroy:success',instance)
@@ -75,3 +83,5 @@ class ModelViewSet(viewsets.ModelViewSet):
 
 	def perform_destroy(self, instance):
 		instance.delete()
+
+

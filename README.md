@@ -15,17 +15,14 @@ web applications.
         'agape.authentication',
     ]
 
-2. Include the polls URLconf in your project urls.py like this:
+2. Include the URLconf in your project urls.py like this:
 
     url(r'^/api/v1/', include('agape.authentication.urls')),
 
 
 3. Run `python manage.py migrate` to create the models.
 
-4. Start the development server and visit http://127.0.0.1:8000/admin/
-   to create a poll (you'll need the Admin app enabled).
-
-5. Visit http://127.0.0.1:8000/polls/ to participate in the poll.
+4. Start the development server and visit http://127.0.0.1:8000/
 
 
 
@@ -38,4 +35,4 @@ python setup.py sdist
 
 ### Installation
 
-pip install django-agape/dist/django-agape-0.1.tar.gz
+pip install ../django-agape/dist/django-agape-0.1.tar.gz

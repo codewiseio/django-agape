@@ -183,33 +183,19 @@ class APITestCase(TestCase):
         self.assertEqual(len(query),0, "Deleted")
 
 
-class PeopleContactsConnectionTestCase(TestCase):
+class ContactsConnectionTestCase(TestCase):
 
     def setUp(self):
         self.client =  APIClient()
 
-        # create callbacks on person creation
-        scope = {}
+        from .connector import ContactsConnector
 
-        def catch_incoming_data(o,request):
-            scope['contactData'] = None
-            scope['contactData'] = request.data.get('contacts',[])
+        connector = ContactsConnector()
+        connector.connect_to_entity('person')
+        # connector.connect('agape.people')
 
-        def create_contacts(o,person):
 
-            print( scope['contactData'] );
-
-            for contact in scope['contactData']:
-                contact['progenitor'] = person.moniker()
-
-            serializer = ContactSerializer(data=scope['contactData'], many=True)
-            if serializer.is_valid():
-                recordSet = serializer.save()
-
-        on('person.create:before',catch_incoming_data)
-        on('person.create:success',create_contacts)
-
-    def test_create_contacts(self):
+    def test_create(self):
 
         data = {
             'first_name':'Elvis',
@@ -231,4 +217,56 @@ class PeopleContactsConnectionTestCase(TestCase):
 
         contact = Contact.objects.get(id=2)
         self.assertEqual(contact.value, 'test@example.com', "Created email record")
+
+
+
+
+# class PeopleContactsConnectionTestCase(TestCase):
+
+#     def setUp(self):
+#         self.client =  APIClient()
+
+#         # create callbacks on person creation
+#         scope = {}
+
+#         def catch_incoming_data(o,request):
+#             scope['contactData'] = None
+#             scope['contactData'] = request.data.get('contacts',[])
+
+#         def create_contacts(o,person):
+
+#             print( scope['contactData'] );
+
+#             for contact in scope['contactData']:
+#                 contact['progenitor'] = person.moniker()
+
+#             serializer = ContactSerializer(data=scope['contactData'], many=True)
+#             if serializer.is_valid():
+#                 recordSet = serializer.save()
+
+#         on('person.create:before',catch_incoming_data)
+#         on('person.create:success',create_contacts)
+
+#     def test_create_contacts(self):
+
+#         data = {
+#             'first_name':'Elvis',
+#             'middle_name':'Aaron',
+#             'last_name':'Presley',
+#             'birthday': "1935-01-08",
+#             'gender': 'm',
+#             'contacts': [
+#                 {'type':Contact.TELEPHONE, 'label':'Home', 'value':'Priceless'},
+#                 {'type':Contact.EMAIL, 'label':'Work', 'value':'test@example.com'},
+#             ]
+#         }        
+#         response = self.client.post('/api/v1/people/', data)
+#         self.assertEqual(response.status_code, 201, "Created new person")
+
+#         # find the contact that was created
+#         contact = Contact.objects.get(id=1)
+#         self.assertEqual(contact.value, 'Priceless', "Created phone record")
+
+#         contact = Contact.objects.get(id=2)
+#         self.assertEqual(contact.value, 'test@example.com', "Created email record")
 
